@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualizando Várias Seções com Fetch API</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        section {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            flex: 1 1 45%;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 5px;
+            background-color: bisque;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 350px;
+            min-height: 150px;
+            text-align: center;
+        }
+
+        .section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Requisições Simultâneas com Fetch API</h1>
+    <section id="div1" class="div1">
+        <div id="section1" class="section">
+            <h2>Seção 1</h2>
+            <p>Aguarde, carregando dados...</p>
+        </div>
+
+        <div id="section2" class="section">
+            <h2>Seção 2</h2>
+            <p>Aguarde, carregando dados...</p>
+        </div>
+    </section>
+    <section id="div2" class="div2">
+        <div id="section3" class="section">
+            <h2>Seção 3</h2>
+            <p>Aguarde, carregando dados...</p>
+        </div>
+
+        <div id="section4" class="section">
+            <h2>Seção 4</h2>
+            <p>Aguarde, carregando dados...</p>
+        </div>
+    </section>
+
+    <button id="atualizarButton" onclick="atualizarAPIs()">Atualizar APIs</button>
+
+    <script>
+        function atualizarAPIs() {
+            // Fetch para a Dog API
+            fetch('https://dog.ceo/api/breeds/image/random')
+                .then(response => response.json())
+                .then(data => {
+                    const img = document.createElement('img');
+                    img.src = data.message;
+                    img.alt = 'Imagem de um cachorro';
+                    const section1 = document.getElementById('section1');
+                    section1.innerHTML = '';
+                    section1.appendChild(img);
+                });
+
+            // Fetch para a Cat API
+            fetch('https://api.thecatapi.com/v1/images/search')
+                .then(response => response.json())
+                .then(data => {
+                    const img = document.createElement('img');
+                    img.src = data[0].url;
+                    img.alt = 'Imagem de um gato';
+                    const section2 = document.getElementById('section2');
+                    section2.innerHTML = '';
+                    section2.appendChild(img);
+                });
+
+            // Fetch para a JokeAPI
+            fetch('https://v2.jokeapi.dev/joke/Any')
+                .then(response => response.json())
+                .then(data => {
+                    const section3 = document.getElementById('section3');
+                    section3.innerHTML = ''; // Limpa o conteúdo atual
+                    if (data.type === "single") {
+                        // Piada de uma linha
+                        section3.innerHTML = `<p>${data.joke}</p>`;
+                    } else {
+                        // Piada de duas partes
+                        section3.innerHTML = `<p>${data.setup}</p><p><em>${data.delivery}</em></p>`;
+                    }
+                });
+
+            // Fetch para a Advice Slip API
+            fetch('https://api.adviceslip.com/advice')
+                .then(response => response.json())
+                .then(data => {
+                    const section4 = document.getElementById('section4');
+                    section4.innerHTML = `<p>"${data.slip.advice}"</p>`;
+                });
+        }
+    </script>
+</body>
+</html>
